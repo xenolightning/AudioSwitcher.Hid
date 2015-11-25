@@ -38,8 +38,8 @@ namespace AudioSwitcher.Hid
         public UsbDevice(IHidDevice device)
         {
             _device = device;
-            _device.Inserted += OnInserted;
-            _device.Removed += OnRemoved;
+            _device.Inserted += DeviceInsert;
+            _device.Removed += DeviceRemove;
             _device.MonitorDeviceEvents = true;
 
             if (device.IsConnected)
