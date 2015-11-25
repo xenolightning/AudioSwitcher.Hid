@@ -11,7 +11,7 @@ namespace AudioSwitcher.Hid.Logitech
 
         private static readonly EventMap EventFunctionMap = new EventMap()
         {
-            {0xFF0800, (x, y) => x.ProcessPowerEvent(y)}
+            {0xFF08, (x, y) => x.ProcessPowerEvent(y)}
         };
 
         internal G933(IHidDevice device)
@@ -28,7 +28,7 @@ namespace AudioSwitcher.Hid.Logitech
         {
             base.ProcessReadResult(result);
 
-            var eventMask = Convert.ToInt32(result.Data.Take(3));
+            var eventMask = Convert.ToInt32(result.Data.Take(2));
 
             if (EventFunctionMap.ContainsKey(eventMask))
                 EventFunctionMap[eventMask](this, result.Data);

@@ -78,41 +78,41 @@ namespace AudioSwitcher.Hid
                 DeviceInsert();
         }
 
-        private void ReadThread(object state)
-        {
-            if (!Device.IsOpen)
-                Device.OpenDevice();
+        //private async void ReadThread(object state)
+        //{
+        //    if (!Device.IsOpen)
+        //        Device.OpenDevice();
 
-            _isActive = true;
+        //    _isActive = true;
 
-            while (_isActive)
-            {
-                try
-                {
-                    var result = _device.ReadReport(10);
+        //    while (_isActive)
+        //    {
+        //        try
+        //        {
+        //            var result = await _device.ReadReportAsync();
 
-                    if (result.ReadStatus == HidDeviceData.ReadStatus.Success)
-                        ProcessReadResult(result);
+        //            if (result.ReadStatus == HidDeviceData.ReadStatus.Success)
+        //                ProcessReadResult(result);
 
 
-                    //).ContinueWith(x =>
-                    //{
-                    //    if (x.Result.ReadStatus == HidDeviceData.ReadStatus.Success)
-                    //        Console.WriteLine(BitConverter.ToString(x.Result.Data));
-                    //}).Start();
-                }
-                catch
-                {
+        //            //).ContinueWith(x =>
+        //            //{
+        //            //    if (x.Result.ReadStatus == HidDeviceData.ReadStatus.Success)
+        //            //        Console.WriteLine(BitConverter.ToString(x.Result.Data));
+        //            //}).Start();
+        //        }
+        //        catch
+        //        {
 
-                }
-                //{
-                //    if (x.IsCompleted)
-                //        ProcessReadResult(x.Result);
-                //});
-            }
+        //        }
+        //        //{
+        //        //    if (x.IsCompleted)
+        //        //        ProcessReadResult(x.Result);
+        //        //});
+        //    }
 
-            Device.CloseDevice();
-        }
+        //    Device.CloseDevice();
+        //}
 
         protected virtual void ProcessReadResult(HidReport result)
         {
@@ -167,7 +167,16 @@ namespace AudioSwitcher.Hid
             OnInserted();
 
             if (!_isActive)
-                ThreadPool.QueueUserWorkItem(ReadThread);
+            {
+                _device.ReadReport(OnReport);
+                //new Thread(ReadThread).Start();
+                //ThreadPool.QueueUserWorkItem(ReadThread);
+            }
+        }
+
+        private void OnReport(HidReport report)
+        {
+            ProcessReadResult(report);
         }
 
         private void DeviceRemove()
