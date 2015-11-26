@@ -11,20 +11,28 @@ namespace AudioSwitcher.Hid.Logitech
 
         private static readonly EventMap EventFunctionMap = new EventMap()
         {
-            {0x11FF0800, (x, y) => x.ProcessPowerEvent(y)}
+            {0xFF08, (x, y) => x.ProcessPowerEvent(y)}
         };
 
         internal G933(IHidDevice device)
             : base(device)
         {
+            if(PId != Constants.LOGITECH_G933_PRODUCT_ID)
+                throw new Exception("Invalid Device");
+
+            if (VId != Constants.LOGITECH_VENDOR_ID)
+                throw new Exception("Invalid Device");
         }
 
-        protected override void ProcessReadResult(HidDeviceData result)
+        protected override void ProcessReadResult(HidReport result)
         {
-            var eventMask = Convert.ToInt32(result.Data.Take(4));
+            base.ProcessReadResult(result);
+
+            var eventMask = Convert.ToInt32(result.Data.Take(2));
 
             if (EventFunctionMap.ContainsKey(eventMask))
                 EventFunctionMap[eventMask](this, result.Data);
+
         }
 
         private void ProcessPowerEvent(byte[] data)
@@ -35,5 +43,6 @@ namespace AudioSwitcher.Hid.Logitech
             else
                 OnPoweredOn();
         }
+        
     }
 }

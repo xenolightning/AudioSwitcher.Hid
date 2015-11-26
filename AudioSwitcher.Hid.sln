@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioSwitcher.Hid.Logitech"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioSwitcher.Hid", "AudioSwitcher.Hid\AudioSwitcher.Hid.csproj", "{819C4F63-8D26-4BDF-B9CF-00F8EFF9391C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{8DE4D099-609D-4A47-BBEF-15DBC219DF2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogitechSwitcher", "LogitechSwitcher\LogitechSwitcher.csproj", "{17DC08C5-4C85-4812-951D-B328FCA4748B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +25,15 @@ Global
 		{819C4F63-8D26-4BDF-B9CF-00F8EFF9391C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{819C4F63-8D26-4BDF-B9CF-00F8EFF9391C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{819C4F63-8D26-4BDF-B9CF-00F8EFF9391C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17DC08C5-4C85-4812-951D-B328FCA4748B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17DC08C5-4C85-4812-951D-B328FCA4748B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17DC08C5-4C85-4812-951D-B328FCA4748B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17DC08C5-4C85-4812-951D-B328FCA4748B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{17DC08C5-4C85-4812-951D-B328FCA4748B} = {8DE4D099-609D-4A47-BBEF-15DBC219DF2C}
 	EndGlobalSection
 EndGlobal
