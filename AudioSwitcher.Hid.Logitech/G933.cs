@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using HidLibrary;
 using EventMap = System.Collections.Generic.Dictionary<int, System.Action<AudioSwitcher.Hid.Logitech.G933, byte[]>>;
 
 

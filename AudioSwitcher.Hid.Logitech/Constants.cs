@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AudioSwitcher.Hid.Logitech
+﻿namespace AudioSwitcher.Hid.Logitech
 {
     internal static class Constants
     {
