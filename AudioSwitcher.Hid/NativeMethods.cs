@@ -10,16 +10,9 @@ namespace AudioSwitcher.Hid
     internal static class NativeMethods
     {
 
-        [Flags]
-        public enum DIGCF : int
-        {
-            None = 0,
-            Default = 1,
-            Present = 2,
-            AllClasses = 4,
-            Profile = 8,
-            DeviceInterface = 16
-        }
+
+        internal const short DIGCF_PRESENT = 0x2;
+        internal const short DIGCF_DEVICEINTERFACE = 0x10;
 
         private static int HIDP_ERROR_CODES(int sev, ushort code)
         {
@@ -60,29 +53,29 @@ namespace AudioSwitcher.Hid
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct DeviceInfoData
+        internal struct DeviceInterfaceData
         {
-            public int Size;
-            public Guid ClassGuid;
-            public uint DevInst;
-            public IntPtr Reserved;
+            internal int cbSize;
+            internal System.Guid InterfaceClassGuid;
+            internal int Flags;
+            internal IntPtr Reserved;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct DeviceInterfaceData
+        internal struct DeviceInfoData
         {
-            public int Size;
-            public Guid InterfaceClassGuid;
-            public int Flags;
-            public IntPtr Reserved;
+            internal int cbSize;
+            internal Guid ClassGuid;
+            internal int DevInst;
+            internal IntPtr Reserved;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct DeviceInterfaceDetailData
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        internal struct DeviceInterfaceDetailData
         {
-            public int Size;
+            internal int Size;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-            public string DevicePath;
+            internal string DevicePath;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -155,32 +148,33 @@ namespace AudioSwitcher.Hid
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool HidD_SetFeature(SafeFileHandle handle, byte[] buffer, int bufferLength);
 
-        [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr SetupDiGetClassDevs(
-            [In,Out] [MarshalAs(UnmanagedType.LPStruct)] ref Guid classGuid,
-            [MarshalAs(UnmanagedType.LPTStr)] string enumerator, 
-            IntPtr hwndParent,
-            DIGCF flags);
 
-        [DllImport("setupapi.dll", SetLastError = true)]
-        public static extern bool SetupDiDestroyDeviceInfoList(IntPtr deviceInfoSet);
+        [DllImport("setupapi.dll")]
+        internal static extern bool SetupDiEnumDeviceInfo(IntPtr deviceInfoSet, int memberIndex, ref DeviceInfoData deviceInfoData);
 
-        [DllImport("setupapi.dll", SetLastError = true)]
-        public static extern bool SetupDiEnumDeviceInterfaces(
-            IntPtr deviceInfoSet, 
-            IntPtr deviceInfoData,
-            [In, Out] [MarshalAs(UnmanagedType.LPStruct)] ref Guid interfaceClassGuid, 
-            int memberIndex,
-            ref DeviceInterfaceData deviceInterfaceData);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        internal static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, IntPtr notificationFilter, Int32 flags);
 
-        [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool SetupDiGetDeviceInterfaceDetail(
-            IntPtr deviceInfoSet,
-            ref DeviceInterfaceData deviceInterfaceData,
-            ref DeviceInterfaceDetailData deviceInterfaceDetailData,
-            int deviceInterfaceDetailDataSize, 
-            IntPtr requiredSize, 
-            IntPtr deviceInfoData);
+        [DllImport("setupapi.dll")]
+        internal static extern int SetupDiCreateDeviceInfoList(ref Guid classGuid, int hwndParent);
+
+        [DllImport("setupapi.dll")]
+        internal static extern int SetupDiDestroyDeviceInfoList(IntPtr deviceInfoSet);
+
+        [DllImport("setupapi.dll")]
+        internal static extern bool SetupDiEnumDeviceInterfaces(IntPtr deviceInfoSet, ref DeviceInfoData deviceInfoData, ref Guid interfaceClassGuid, int memberIndex, ref DeviceInterfaceData deviceInterfaceData);
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
+        internal static extern IntPtr SetupDiGetClassDevs(ref Guid classGuid, string enumerator, int hwndParent, int flags);
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Auto, EntryPoint = "SetupDiGetDeviceInterfaceDetail")]
+        internal static extern bool SetupDiGetDeviceInterfaceDetailBuffer(IntPtr deviceInfoSet, ref DeviceInterfaceData deviceInterfaceData, IntPtr deviceInterfaceDetailData, int deviceInterfaceDetailDataSize, ref int requiredSize, IntPtr deviceInfoData);
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
+        internal static extern bool SetupDiGetDeviceInterfaceDetail(IntPtr deviceInfoSet, ref DeviceInterfaceData deviceInterfaceData, ref DeviceInterfaceDetailData deviceInterfaceDetailData, int deviceInterfaceDetailDataSize, ref int requiredSize, IntPtr deviceInfoData);
+
+        [DllImport("user32.dll")]
+        internal static extern bool UnregisterDeviceNotification(IntPtr handle);
 
         [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern SafeFileHandle CreateFile(
