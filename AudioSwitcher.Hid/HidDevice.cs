@@ -2,13 +2,17 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using Microsoft.Win32.SafeHandles;
 
 namespace AudioSwitcher.Hid
 {
     public class HidDevice : IHidDevice
     {
+
+        private SafeFileHandle _deviceHandle;
+        private FileStream _deviceStream;
+
+
         public string DevicePath { get; private set; }
 
         public string Manufacturer { get; private set; }
@@ -26,6 +30,7 @@ namespace AudioSwitcher.Hid
         public int ProductVersion { get; private set; }
 
         public string SerialNumber { get; private set; }
+        public bool IsValid { get; private set; }
 
         public int VendorId { get; private set; }
 
@@ -33,17 +38,28 @@ namespace AudioSwitcher.Hid
 
         public event Action<byte[]> FeatureRead;
 
-        private SafeFileHandle _deviceHandle;
-        private FileStream _deviceStream;
-
 
         public HidDevice(string path)
         {
             DevicePath = path;
+            
+            CreateDeviceHandle();
+            IsValid = !_deviceHandle.IsInvalid;
 
-            CreateFileHandles();
+            if (!IsValid)
+            {
+                IsValid = false;
+                return;
+            }
+
             GetDeviceInformation();
             GetInfoComplete();
+            CreateFileStream();
+        }
+
+        private void CreateFileStream()
+        {
+            _deviceStream = new FileStream(_deviceHandle, GetFileAccess(), MaxInputReportLength, true);
         }
 
         protected virtual FileAccess GetFileAccess()
@@ -51,7 +67,7 @@ namespace AudioSwitcher.Hid
             return FileAccess.Read;
         }
 
-        private void CreateFileHandles()
+        private void CreateDeviceHandle()
         {
             _deviceHandle = NativeMethods.CreateFile(
                                                DevicePath,
@@ -61,8 +77,6 @@ namespace AudioSwitcher.Hid
                                                FileMode.Open,
                                                NativeMethods.EFileAttributes.Overlapped,
                                                IntPtr.Zero);
-
-            _deviceStream = new FileStream(_deviceHandle, GetFileAccess(), MaxInputReportLength, true);
         }
 
         private void GetDeviceInformation()
@@ -71,9 +85,7 @@ namespace AudioSwitcher.Hid
             attributes.Size = Marshal.SizeOf(attributes);
 
             if (!NativeMethods.HidD_GetAttributes(_deviceHandle, ref attributes))
-            {
                 return;
-            }
 
             ProductId = attributes.ProductId;
             VendorId = attributes.VendorId;
@@ -87,7 +99,9 @@ namespace AudioSwitcher.Hid
                 var buffer = new StringBuilder(128);
 
                 Manufacturer = NativeMethods.HidD_GetManufacturerString(_deviceHandle, buffer, buffer.Capacity) ? buffer.ToString() : "";
+
                 ProductName = NativeMethods.HidD_GetProductString(_deviceHandle, buffer, buffer.Capacity) ? buffer.ToString() : "";
+
                 SerialNumber = NativeMethods.HidD_GetSerialNumberString(_deviceHandle, buffer, buffer.Capacity) ? buffer.ToString() : "";
 
                 IntPtr preparsed;

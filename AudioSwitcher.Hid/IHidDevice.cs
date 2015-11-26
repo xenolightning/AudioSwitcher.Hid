@@ -23,6 +23,8 @@ namespace AudioSwitcher.Hid
 
         string SerialNumber { get; }
 
+        bool IsValid { get; }
+
         int VendorId { get; }
 
         event Action<byte[]> ReportRead;

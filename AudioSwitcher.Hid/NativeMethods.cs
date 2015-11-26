@@ -56,7 +56,7 @@ namespace AudioSwitcher.Hid
         internal struct DeviceInterfaceData
         {
             internal int cbSize;
-            internal System.Guid InterfaceClassGuid;
+            internal Guid InterfaceClassGuid;
             internal int Flags;
             internal IntPtr Reserved;
         }
@@ -82,8 +82,8 @@ namespace AudioSwitcher.Hid
         public struct DeviceAttributes
         {
             public int Size;
-            public short VendorId;
-            public short ProductId;
+            public ushort VendorId;
+            public ushort ProductId;
             public short VersionNumber;
         }
 

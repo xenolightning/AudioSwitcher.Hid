@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AudioSwitcher.Hid
 {
@@ -36,6 +32,14 @@ namespace AudioSwitcher.Hid
                         //var description = GetBusReportedDeviceDescription(deviceInfoSet, ref deviceInfoData) ??
                         //                  GetDeviceDescription(deviceInfoSet, ref deviceInfoData);
                         //devices.Add(new DeviceInfo {Path = devicePath, Description = description});
+
+                        var test = new HidDevice(devicePath);
+                        if (test.IsValid)
+                        {
+
+                            Console.WriteLine(devicePath);
+                            Console.WriteLine(test.ProductId);
+                        }
                     }
                 }
                 NativeMethods.SetupDiDestroyDeviceInfoList(deviceInfoSet);

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Linq;
-using System.Threading;
 using AudioSwitcher.Hid;
-using AudioSwitcher.Hid.Logitech;
 
 namespace LogitechSwitcher
 {

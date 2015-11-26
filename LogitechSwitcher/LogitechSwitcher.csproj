@@ -59,10 +59,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AudioSwitcher.Hid.Logitech\AudioSwitcher.Hid.Logitech.csproj">
-      <Project>{f11f73da-aa94-456f-a1d2-db9523b0f1f7}</Project>
-      <Name>AudioSwitcher.Hid.Logitech</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AudioSwitcher.Hid\AudioSwitcher.Hid.csproj">
       <Project>{819c4f63-8d26-4bdf-b9cf-00f8eff9391c}</Project>
       <Name>AudioSwitcher.Hid</Name>
