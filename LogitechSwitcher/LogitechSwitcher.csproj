@@ -34,15 +34,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AudioSwitcher.AudioApi, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AudioSwitcher.AudioApi.3.0.0-beta1\lib\portable-net4+wp7+win8\AudioSwitcher.AudioApi.dll</HintPath>
+      <HintPath>..\packages\AudioSwitcher.AudioApi.3.0.0\lib\net40\AudioSwitcher.AudioApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="AudioSwitcher.AudioApi.CoreAudio, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AudioSwitcher.AudioApi.CoreAudio.3.0.0-beta1\lib\net40\AudioSwitcher.AudioApi.CoreAudio.dll</HintPath>
+      <HintPath>..\packages\AudioSwitcher.AudioApi.CoreAudio.3.0.0.1\lib\net40\AudioSwitcher.AudioApi.CoreAudio.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="HidLibrary, Version=3.2.31.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\hidlibrary.3.2.31.0\lib\HidLibrary.dll</HintPath>
+    <Reference Include="HidLibrary, Version=3.2.46.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\hidlibrary.3.2.46.0\lib\HidLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
